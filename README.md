@@ -37,3 +37,13 @@ let
 		
 	hash = scrypt4(P, salt, 16384, 8, 1, 256/8),// 32 bytes Uint8Array returns
 ```
+#Benchmarks:
+
+```
+scrypt_benchmarks.htm: The calculation is completed (the script is the original version of the developer)
+scrypt_benchmarks.htm: x = 151,239,228,246,210,183,123,24,237,228,16,45,28,180,63,3,185,88,191,144,169,166,62,21,130,109,218,178,147,9,42,161
+scrypt_benchmarks.htm: Time: 0.317sec
+scrypt_benchmarks.htm: The calculation is completed (script 4 this optimized version)
+scrypt_benchmarks.htm: x = 151,239,228,246,210,183,123,24,237,228,16,45,28,180,63,3,185,88,191,144,169,166,62,21,130,109,218,178,147,9,42,161
+scrypt_benchmarks.htm: Time: 0.242sec
+```
