@@ -25,7 +25,8 @@ on a specialized FPGA chip.
 password123:97efe4f6d2b77b18ede4102d1cb43f03b958bf90a9a63e15826ddab293092aa1
 test:558597b557f9883a3420e754a4c4fc3aead9edce2b511c9aa194e0372ee0198c
 ```
-#Usage
+
+#Use:
 ```javascript
 let
 	ENCODER = new TextEncoder(),
