@@ -19,9 +19,20 @@ on a specialized FPGA chip.
    
   **these changes increased the overall performance of the function by an average of 25%**
   
-  ##reference (reference) hashes for different passwords
+##reference (reference) hashes for different passwords
   ```
 111111Qq:51dd01f633dcabccda8190be3c7bc9973918c6f59668e077522f8ef8eef561af
 password123:97efe4f6d2b77b18ede4102d1cb43f03b958bf90a9a63e15826ddab293092aa1
 test:558597b557f9883a3420e754a4c4fc3aead9edce2b511c9aa194e0372ee0198c
+```
+#Usage
+```javascript
+let
+	ENCODER = new TextEncoder(),
+	pas = 'your secret password',	
+	P = ENCODER.encode(pas),
+	hex = (s) => BigInt('0x' + s.replace(/\s/g, '')),
+	salt = hex('BEB25379 D1A8581E B5A72767 3A2441EE').toUint8Array(),
+		
+	hash = scrypt4(P, salt, 16384, 8, 1, 256/8),// 32 bytes Uint8Array returns
 ```
