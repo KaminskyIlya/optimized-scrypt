@@ -1,0 +1,123 @@
+<html>
+<body>
+<p>См. вывод в консоли браузера. F12 / Console</p>
+
+<!-- исходная библиотека Scrypt -->
+<script src="scrypt.js"></script>
+<!-- оптимизированная версия Scrypt, на 25% -->
+<script src="scrypt4.js"></script>
+<script>
+/**
+ * Convert bigint value to byte array
+ *
+ * @param value the BigInt value
+ * @return Uint8Array
+ */
+BigInt.prototype.toUint8Array = function()
+{
+let
+	str = this.toString(16), // the hex representation of that
+	n = str.length, // how many half-bytes in string?
+	array = new Uint8Array( (n + 1) >> 1 ), // size in bytes of bigint
+	i = n & 1; // position of firts byte
+
+	// if length of string is odd
+	if ( i == 1 )
+		// write the first half-byte as zeroth byte
+		array[0] = parseInt('0x' + str.charAt(0));
+
+	for (let j = i; i < n; i+=2, j++)
+		// writes remained bytes in array
+		array[j] = parseInt('0x' + str.substr(i, 2));
+
+	return array;
+}
+</script>
+<script>
+let
+	ENCODER = new TextEncoder(),
+	
+	//I = ENCODER.encode('alice'),
+	P = ENCODER.encode('password123'),
+	hex = (s) => BigInt('0x' + s.replace(/\s/g, '')),
+	salt = hex('BEB25379 D1A8581E B5A72767 3A2441EE').toUint8Array(),
+	start, stop,
+	x;
+	
+	
+	function calc_source()
+	{
+		start = new Date();
+		x = scrypt.syncScrypt(P, salt, 16384, 8, 1, 256/8);
+		stop = new Date();
+		
+		console.log('Расчет закончен (scrypt исходная версия разработчика)');
+		console.log('x = ' + x);
+		console.log('Время: ' + ((stop - start) / 1000) + 'сек');
+	}
+	calc_source();
+
+
+	/*async function calc2()
+	{
+		start = new Date();
+		x = await scrypt2.scrypt(P, salt, 16384, 8, 1, 256/8);
+		stop = new Date();
+		
+		console.log('Расчет закончен (scrypt2 = crypto.subtle.digest)');
+		console.log('x = ' + x);
+		console.log('Время: ' + ((stop - start) / 1000) + 'сек');
+	};
+	calc2();
+
+	function calc3()
+	{
+		start = new Date();
+		x = scrypt3.syncScrypt(P, salt, 16384/1, 8, 1, 256/8);
+		stop = new Date();
+		
+		console.log('Расчет закончен (scrypt3)');
+		console.log('x = ' + x);
+		console.log('Время: ' + ((stop - start) / 1000) + 'сек');
+	};
+	calc3();
+
+	function calc3a()
+	{
+		start = new Date();
+		x = scrypt3a.syncScrypt(P, salt, 16384, 8, 1, 256/8);
+		stop = new Date();
+		
+		console.log('Расчет закончен (scrypt3a)');
+		console.log('x = ' + x);
+		console.log('Время: ' + ((stop - start) / 1000) + 'сек');
+	};
+	calc3a();
+
+	function calc3b()
+	{
+		start = new Date();
+		x = scrypt3b.syncScrypt(P, salt, 16384, 8, 1, 256/8);
+		stop = new Date();
+		
+		console.log('Расчет закончен (scrypt3b)');
+		console.log('x = ' + x);
+		console.log('Время: ' + ((stop - start) / 1000) + 'сек');
+	};
+	calc3b();*/
+
+	function calc4()
+	{
+		start = new Date();
+		x = scrypt4(P, salt, 16384, 8, 1, 256/8);
+		stop = new Date();
+		
+		console.log('Расчет закончен (scrypt4 оптимизированная версия)');
+		console.log('x = ' + x);
+		console.log('Время: ' + ((stop - start) / 1000) + 'сек');
+	};
+	calc4();
+	
+</script>
+</body>
+</html>
