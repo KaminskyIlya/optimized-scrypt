@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="RU">
+<head>
+	<title>Анимация конвейера blockmix_salsa8</title>
+	<script type="text/javascript" src="ani.min.js"></script>
+	<style>
+	body { background: black }
+	p { color: #ccc; font-family: sans-serif }
+	.block
+	{
+		display: inline-block;
+		width: 20px;
+		height: 20px;
+		border: solid 1px white;
+		padding: 2px;
+		margin: 4px;
+	}
+	pre { color: white; font-family: monospace }
+	pre span.active { background: blue }
+	</style>
+</head>
+<body>
+
+<section id="application">
+<p>Анимация работы smix_salsa8 (на примере r = 8)</p>
+<p>(один цветной блок - 64 байта)</p>
+<p id="inform">Начинаем c B<sub>15</sub></p>
+
+<div class="operation-line">
+	<div class="block alu"></div>
+	<div class="block alu"></div>
+	<div class="block alu"></div>
+	<div class="block alu"></div>
+	<div class="block alu"></div>
+	<div class="block alu"></div>
+	<div class="block alu"></div>
+	<div class="block alu"></div>
+	<div class="block alu"></div>
+	<div class="block alu"></div>
+	<div class="block alu"></div>
+	<div class="block alu"></div>
+	<div class="block alu"></div>
+	<div class="block alu"></div>
+	<div class="block alu"></div>
+	<div class="block alu"></div>
+</div>
+<div class="pipeline-C">
+	<div id="x_block" class="block"></div>
+</div>
+<button id="play" onclick="startAnimation()">Начать</button>
+<button id="pause" onclick="toggleAnimation()" hidden>Пауза</button>
+
+<pre lang="Java">
+<span>arraycopy(B, (2 * r - 1) * 64, X, 0, 64);</span>
+
+for (i = 0; i < 2 * r; i++)
+{
+	<span>blockxor(B, i * 64, X, 0, 64);</span>
+	<span>salsa20_8(X);</span>
+	<span>arraycopy(X, 0, B, (i&1)*1024 + (i&gt;&gt;1)*64, 64);</span>
+}
+
+<span>arraycopy(B, 1024, B, 512, 512);</span>
+</section>
+
+<script type="text/javascript" src="animate2v2.js"></script>
+</body>
+</html>
