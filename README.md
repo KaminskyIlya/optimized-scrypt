@@ -12,18 +12,10 @@ the author claims that he managed to bring the speed of this function to 10 MHz
 on a specialized FPGA chip.
 
 ##What optimizations have been performed?:
-	1. Slightly rewritten SHA2
-2. Rearranging commands inside the salsa20_8 loop to use the superscalarity of the Cpu
-	   In Java, it had an effect of 12%. In Js, it's possible too. We need more measurements.
-	3. The PBKDF2 function has been optimized.
-	   The loop is not merging arrays, but overwriting them into a buffer.
-	   Constant calculations have also been removed from the loop.
-	   There are measurements in a similar Java code - it gave an acceleration there.
-	   In addition, PBKDF2 code can be executed in 32 independent streams.
-	   I did it in Java in 4 threads. I got an acceleration of 4 times in this section.
-	4. Optimized the blockmix_salsa 8 function, avoiding
-	   unnecessary copying of 512 bytes and unnecessary memory allocation in the loop.
-		 Considering that the function will be called N times, this is a good optimization.
+1. Slightly rewritten SHA2
+2. Rearranging commands inside the salsa20_8 loop to use the superscalarity of the Cpu In Java, it had an effect of 12%. In Js, it's possible too. We need more measurements.
+3. The PBKDF2 function has been optimized.The loop is not merging arrays, but overwriting them into a buffer. Constant calculations have also been removed from the loop. There are measurements in a similar Java code - it gave an acceleration there.  In addition, PBKDF2 code can be executed in 32 independent streams.  I did it in Java in 4 threads. I got an acceleration of 4 times in this section.
+4. Optimized the blockmix_salsa 8 function, avoiding unnecessary copying of 512 bytes and unnecessary memory allocation in the loop. Considering that the function will be called N times, this is a good optimization.
    
   **these changes increased the overall performance of the function by an average of 25%**
   
