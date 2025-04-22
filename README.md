@@ -27,6 +27,9 @@ test:558597b557f9883a3420e754a4c4fc3aead9edce2b511c9aa194e0372ee0198c
 ```
 
 #Use:
+```html
+<script src="scrypt4.js"></script>
+```
 ```javascript
 let
 	ENCODER = new TextEncoder(),
