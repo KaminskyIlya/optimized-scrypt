@@ -1,0 +1,81 @@
+<html>
+<body>
+<div id="output">Scrypt output</div>
+
+<script src="scrypt4.js"></script>
+<script>
+/**
+ * Convert bigint value to byte array
+ *
+ * @param value the BigInt value
+ * @return Uint8Array
+ */
+BigInt.prototype.toUint8Array = function()
+{
+let
+	str = this.toString(16), // the hex representation of that
+	n = str.length, // how many half-bytes in string?
+	array = new Uint8Array( (n + 1) >> 1 ), // size in bytes of bigint
+	i = n & 1; // position of firts byte
+
+	// if length of string is odd
+	if ( i == 1 )
+		// write the first half-byte as zeroth byte
+		array[0] = parseInt('0x' + str.charAt(0));
+
+	for (let j = i; i < n; i+=2, j++)
+		// writes remained bytes in array
+		array[j] = parseInt('0x' + str.substr(i, 2));
+
+	return array;
+}
+/**
+ * Convert Uint8Array to BigInt.
+ * The input array is assumed to be in <i>big-endian</i> byte-order:
+ * the most significant byte is in the zeroth element.
+ *
+ * @param bytes (Uint8Array) - the source array
+ * @return (BigInt)
+ */
+BigInt.fromUint8Array = function( bytes )
+{
+let
+	result = ['0x'];
+
+	for (let i in bytes)
+	{
+		let c = '0' + bytes[i].toString(16);
+		result.push( c.substr(c.length-2, 2) );
+	}
+
+	return BigInt( result.join('') )
+}
+</script>
+<script>
+
+let
+	ENCODER = new TextEncoder(),
+	
+	//I = ENCODER.encode('alice'),
+	P = ENCODER.encode('password123'),
+	hex = (s) => BigInt('0x' + s.replace(/\s/g, '')),
+	salt = hex('BEB25379 D1A8581E B5A72767 3A2441EE').toUint8Array(),
+	
+	start = new Date(),	
+	x = scrypt4(P, salt, 16384, 8, 1, 256/8),			
+	stop = new Date(),
+	
+	out = document.getElementById('output'),
+	val = BigInt.fromUint8Array(x);
+
+	
+	var expect = BigInt('0x97EFE4F6D2B77B18EDE4102D1CB43F03B958BF90A9A63E15826DDAB293092AA1');	
+
+	out.innerHTML = (expect != val ? 'Ошибка' : 'Успех') + '<br/>' +	
+		val.toString(16) + '<br/>' +
+		expect.toString(16) + '<br/>' +
+		'Время генерации: ' + (stop - start) + 'мс' ;
+
+</script>
+</body>
+</html>
